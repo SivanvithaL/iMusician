@@ -1,0 +1,934 @@
+{
+	"info": {
+		"_postman_id": "acaa6d82-dd34-48d3-b409-f00907923821",
+		"name": "TestiMusician",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SignIn",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('token', res.access_token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"grant_type\": \"password\",\r\n\t\"client_id\": 2,\r\n\t\"client_secret\": \"not-really-a-secret\",\r\n\t\"password\": \"testA@123\",\r\n\t\"username\": \"someuser@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/oauth/token",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "promo-credit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('order_id', res.item.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/products/promo-credit-67/order/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"products",
+						"promo-credit-67",
+						"order",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order_id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('invoice_id', res.item.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"order_ids\": [{{order_id}}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-payment-method-card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"payment_method_id\": \"card\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-payment-method-paypal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"payment_method_id\": \"paypal\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Credit card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('invoice_id', res.item.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payment_method_id\": \"card\", \r\n    \"data\": {\r\n        \"encrypted_card_number\": \"2222 4000 7000 0005\",\r\n        \"encrypted_expiry_month\": \"03\",\r\n        \"encrypted_expiry_year\":\"30\",\r\n        \"encrypted_security_code\":\"737\"    \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/payment/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"payment",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "overview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": " Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "promo-credit",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('order_id', res.item.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/products/promo-credit-67/order/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"products",
+						"promo-credit-67",
+						"order",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order_id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('invoice_id', res.item.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"order_ids\": [{{order_id}}]}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-payment-method-card",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"payment_method_id\": \"card\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-payment-method-paypal",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"payment_method_id\": \"paypal\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "overview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": " application/json",
+						"type": "text"
+					},
+					{
+						"key": "accept-encoding",
+						"value": " gzip, deflate, br",
+						"type": "text"
+					},
+					{
+						"key": "accept-language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "authorization",
+						"value": " Bearer {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/overview",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"overview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "paypal payment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var res = pm.response.json();\r",
+							"pm.environment.set('payment_data', res.transaction.details.payment_data);\r",
+							"pm.environment.set('returnUrl', res.transaction.details.checkout_params_returnUrl);\r",
+							"pm.environment.set('redirect_url', res.transaction.redirect_url);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"payment_method_id\": \"paypal\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.staging.imusician.app/v3/invoices/{{invoice_id}}/payment/?with=items",
+					"protocol": "https",
+					"host": [
+						"api",
+						"staging",
+						"imusician",
+						"app"
+					],
+					"path": [
+						"v3",
+						"invoices",
+						"{{invoice_id}}",
+						"payment",
+						""
+					],
+					"query": [
+						{
+							"key": "with",
+							"value": "items"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "login_email",
+						"value": "sb-43v439w6134267@personal.example.com",
+						"type": "text"
+					},
+					{
+						"key": "login_password",
+						"value": "={_&C@2s",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://www.sandbox.paypal.com/signin?intent=checkout&ctxId=xo_ctx_EC-1J2881783L887284V&returnUri=%2Fwebapps%2Fhermes&state=%3Fflow%3D1-P%26ulReturn%3Dtrue%26token%3DEC-1J2881783L887284V%26useraction%3Dcommit%26rcache%3D2&locale.x=en_GB&country.x=GB&flowId=EC-1J2881783L887284V",
+					"protocol": "https",
+					"host": [
+						"www",
+						"sandbox",
+						"paypal",
+						"com"
+					],
+					"path": [
+						"signin"
+					],
+					"query": [
+						{
+							"key": "intent",
+							"value": "checkout"
+						},
+						{
+							"key": "ctxId",
+							"value": "xo_ctx_EC-1J2881783L887284V"
+						},
+						{
+							"key": "returnUri",
+							"value": "%2Fwebapps%2Fhermes"
+						},
+						{
+							"key": "state",
+							"value": "%3Fflow%3D1-P%26ulReturn%3Dtrue%26token%3DEC-1J2881783L887284V%26useraction%3Dcommit%26rcache%3D2"
+						},
+						{
+							"key": "locale.x",
+							"value": "en_GB"
+						},
+						{
+							"key": "country.x",
+							"value": "GB"
+						},
+						{
+							"key": "flowId",
+							"value": "EC-1J2881783L887284V"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "Hanuman@$11",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "sivanvitha.lammata@gmail.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
