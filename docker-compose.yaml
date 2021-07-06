@@ -1,0 +1,8 @@
+version: "2"
+services:
+  postman:
+      image: postman/newman
+      command:
+        run TestiMusician.json
+      volumes:
+        - ./tests:/etc/newman
