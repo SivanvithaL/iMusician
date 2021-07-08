@@ -1,6 +1,6 @@
 version: "2"
 services:
-  postman:
+  mypostman:
       image: postman/newman
       command:
         run TestiMusician.json
